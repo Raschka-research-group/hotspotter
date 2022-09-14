@@ -22,6 +22,16 @@ conda config --add channels conda-forge
 
 
 
+## Hotspotter script
+
+
+
+
+
+## Experiments
+
+
+
 3. Install Python libraries
 
 
@@ -35,3 +45,20 @@ conda install scikit-learn==1.1.2 jupyterlab watermark==2.3.1 matplotlib==3.5.3 
 
 
 jupyterlab
+
+
+
+## Developers and Contributors
+
+
+
+Please install the pre-commits before making commits and submitting Pull Requests
+
+
+
+conda install pre-commit
+
+pre-commit install
+
+
+
