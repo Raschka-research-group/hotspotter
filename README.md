@@ -1,22 +1,21 @@
+# Hotspotter
+
+
+
 ## Setting Up the Computing Environment
 
 
 
-1. Download and install the conda package manager
-
-https://docs.conda.io/en/latest/miniconda.html
+1. Download and install the conda package manager from https://docs.conda.io/en/latest/miniconda.html
 
 
 
 2. Create a new virtual environment
 
 
-
-conda create -n hotspot python=3.9
-
-conda activate hotspot
-
 ```
+conda create -n hotspot python=3.9
+conda activate hotspot
 conda config --add channels conda-forge
 ```
 
@@ -25,15 +24,23 @@ conda config --add channels conda-forge
 ## Use the Hotspotter Script
 
 
+Install additional Python libraries via
 
+```
+conda install scikit-learn==1.1.2 numpy==1.23.3 pandas==1.4.4 --yes
+```
 
+Then navigate into the `hotspotter` subfolder:
+
+```
+cd hotspotter
+```
+
+and use the `hotspotter.py` script.
 
 Get usage information by running `python hotspotter.py --help`:
 
-
-
 ```
-$ cd hotspotter
 $ python hotspotter.py --help
 [OK] Your Python version is 3.9.13 | packaged by conda-forge | (main, May 27 2022, 17:01:00) 
 [Clang 13.0.1 ]
@@ -93,22 +100,27 @@ Where each line corresponds to one row in the CSV file (1=hotspot, 0=not hotspot
 
 ## Use the Experiments Notebooks
 
+In order to run the code in the experiment notebooks, install the following additional Python libraries:
+
+```
+conda install \
+scikit-learn==1.1.2 \
+jupyterlab \
+watermark==2.3.1 \
+matplotlib==3.5.3 \
+numpy==1.23.3 \
+pandas==1.4.4 \
+mlxtend==0.21.0 \
+--yes
+```
 
 
-3. Install Python libraries
+Next, start JupyterLab and use notebooks via the command
 
 
-
-conda install scikit-learn==1.1.2 jupyterlab watermark==2.3.1 matplotlib==3.5.3 numpy==1.23.3 pandas==1.4.4 mlxtend==0.21.0 --yes
-
-
-
-4. Start JupyterLab and use notebooks
-
-
-
-jupyterlab
-
+```
+jupyter lab
+```
 
 
 ## Developers and Contributors
@@ -118,10 +130,9 @@ jupyterlab
 Please install the pre-commits before making commits and submitting Pull Requests
 
 
-
-conda install pre-commit
-
+```
+conda install pre-commit --yes
 pre-commit install
-
+```
 
 
