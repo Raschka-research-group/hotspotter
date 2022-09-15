@@ -9,7 +9,6 @@ import numpy as np
 import pandas as pd
 from joblib import load
 from packaging import version
-from sklearn.preprocessing import OneHotEncoder
 
 
 def get_packages(pkgs):
@@ -125,11 +124,16 @@ if __name__ == "__main__":
 
     df = df[feature_list]
 
-    # One-hot encoding
-    ohe = OneHotEncoder(drop="first")
+    if args.sequence_only:
+        ohe, pipe = load(args.trained_model_sequence_only)
+        ohe_list = ["residue"]
+    else:
+        ohe, pipe = load(args.trained_model)
+        ohe_list = ["residue", "secondary structure"]
 
-    # 1) convert aa char to int
-    codes = [
+    ohe.handle_unknown = "ignore"
+
+    aa_codes = [
         "A",
         "R",
         "N",
@@ -151,28 +155,24 @@ if __name__ == "__main__":
         "Y",
         "V",
     ]
-    code_to_int = {c: i for i, c in enumerate(codes)}
+
+    code_to_int = {c: i for i, c in enumerate(aa_codes)}
     df["residue"] = df["residue"].map(code_to_int)
     df["residue"] = df["residue"].astype("category")
 
     if args.sequence_only:
         ohe_list = ["residue"]
     else:
-        codes = ["H", "S", "T", "-"]
-        code_to_int = {c: i for i, c in enumerate(codes)}
+        res_codes = ["H", "S", "T", "-"]
+        code_to_int = {c: i for i, c in enumerate(res_codes)}
         df["secondary structure"] = df["secondary structure"].map(code_to_int)
         df["secondary structure"] = df["secondary structure"].astype("category")
         ohe_list = ["residue", "secondary structure"]
 
-    ohe.fit(df[ohe_list])
     df_ohe = df.drop(columns=ohe_list)
+
     X_ohe_temp = np.asarray(ohe.transform(df[ohe_list]).todense())
     X_ohe = np.hstack((df_ohe.values, X_ohe_temp))
-
-    if args.sequence_only:
-        pipe = load(args.trained_model_sequence_only)
-    else:
-        pipe = load(args.trained_model)
 
     results = pipe.predict(X_ohe)
 
