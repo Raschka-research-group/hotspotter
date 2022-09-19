@@ -105,18 +105,20 @@ if __name__ == "__main__":
 
     df = pd.read_csv(args.csv_path)
 
-    feature_list = [
-        "avg bond number",
-        "Hbond",
-        "residue",
-        "Hphob",
-        "consurf",
-        "B' side chain",
-        "asa",
-    ]
+    if args.sequence_only:
+        feature_list = ["residue", "consurf", "secondary structure"]
 
-    if not args.sequence_only:
-        feature_list.append("secondary structure")
+    else:
+        feature_list = [
+            "avg bond number",
+            "Hbond",
+            "residue",
+            "Hphob",
+            "consurf",
+            "B' side chain",
+            "secondary structure",
+            "asa",
+        ]
 
     for feature in feature_list:
         if feature not in df.columns:
@@ -126,10 +128,8 @@ if __name__ == "__main__":
 
     if args.sequence_only:
         ohe, pipe = load(args.trained_model_sequence_only)
-        ohe_list = ["residue"]
     else:
         ohe, pipe = load(args.trained_model)
-        ohe_list = ["residue", "secondary structure"]
 
     ohe.handle_unknown = "ignore"
 
@@ -160,17 +160,13 @@ if __name__ == "__main__":
     df["residue"] = df["residue"].map(code_to_int)
     df["residue"] = df["residue"].astype("category")
 
-    if args.sequence_only:
-        ohe_list = ["residue"]
-    else:
-        res_codes = ["H", "S", "T", "-"]
-        code_to_int = {c: i for i, c in enumerate(res_codes)}
-        df["secondary structure"] = df["secondary structure"].map(code_to_int)
-        df["secondary structure"] = df["secondary structure"].astype("category")
-        ohe_list = ["residue", "secondary structure"]
+    res_codes = ["H", "S", "T", "-"]
+    code_to_int = {c: i for i, c in enumerate(res_codes)}
+    df["secondary structure"] = df["secondary structure"].map(code_to_int)
+    df["secondary structure"] = df["secondary structure"].astype("category")
+    ohe_list = ["residue", "secondary structure"]
 
     df_ohe = df.drop(columns=ohe_list)
-
     X_ohe_temp = np.asarray(ohe.transform(df[ohe_list]).todense())
     X_ohe = np.hstack((df_ohe.values, X_ohe_temp))
 
