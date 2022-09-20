@@ -78,14 +78,7 @@ if __name__ == "__main__":
         "--trained_model",
         help="Path to the trained model",
         type=str,
-        default="./mlp.joblib",
-    )
-
-    parser.add_argument(
-        "--trained_model_sequence_only",
-        help="Path to the trained model for --sequence_only prediction.",
-        type=str,
-        default="./mlp_sequence_only.joblib",
+        default="./mlp-hotspotter.joblib",
     )
 
     parser.add_argument(
@@ -126,8 +119,11 @@ if __name__ == "__main__":
 
     df = df[feature_list]
 
+    ohe, pipe = load(args.trained_model)
+
     if args.sequence_only:
-        ohe, pipe = load(args.trained_model_sequence_only)
+        if args.trained_model == "./mlp-hotspotter.joblib":
+            ohe, pipe = load("./mlp-seqonly-hotspotter.joblib")
     else:
         ohe, pipe = load(args.trained_model)
 
