@@ -78,7 +78,7 @@ if __name__ == "__main__":
         "--trained_model",
         help="Path to the trained model",
         type=str,
-        default="./mlp-hotspotter.joblib",
+        required=True,
     )
 
     parser.add_argument(
@@ -120,12 +120,6 @@ if __name__ == "__main__":
     df = df[feature_list]
 
     ohe, pipe = load(args.trained_model)
-
-    if args.sequence_only:
-        if args.trained_model == "./mlp-hotspotter.joblib":
-            ohe, pipe = load("./mlp-seqonly-hotspotter.joblib")
-    else:
-        ohe, pipe = load(args.trained_model)
 
     ohe.handle_unknown = "ignore"
 
