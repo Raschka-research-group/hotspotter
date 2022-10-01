@@ -78,14 +78,7 @@ if __name__ == "__main__":
         "--trained_model",
         help="Path to the trained model",
         type=str,
-        default="./mlp.joblib",
-    )
-
-    parser.add_argument(
-        "--trained_model_sequence_only",
-        help="Path to the trained model for --sequence_only prediction.",
-        type=str,
-        default="./mlp_sequence_only.joblib",
+        required=True,
     )
 
     parser.add_argument(
@@ -126,10 +119,7 @@ if __name__ == "__main__":
 
     df = df[feature_list]
 
-    if args.sequence_only:
-        ohe, pipe = load(args.trained_model_sequence_only)
-    else:
-        ohe, pipe = load(args.trained_model)
+    ohe, pipe = load(args.trained_model)
 
     ohe.handle_unknown = "ignore"
 

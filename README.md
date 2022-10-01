@@ -62,17 +62,55 @@ optional arguments:
   --print_row_numbers {true,false}
 ```
 
+<br>
+<br>
+<br>
 
 
-You CSV file should contain the same columns as the [[hotspotter/TestDataset.csv](hotspotter/TestDataset.csv)] file. If you are running the hotspotter in `--sequence-only true` mode, your CSV file does not have to contain the `secondary structure` column.
+You can run the hotspotter with 4 different classification models
 
-If your CSV file contains additional columns, it doesn't matter. Also, the column order does not matter.
 
-If the conditions above are met, you can run the hotspotter as follows
+1. `mlp-allfeatures.joblib`: the multilayer perceptron trained with the best hyperparameter settings on the training set and as evaluated in the research paper. This Model requires the feature columns  "avg bond number", "Hbond", "residue", "Hphob", "consurf", "B' side chain", "secondary structure",  "asa". See the   [[hotspotter/TestDataset.csv](hotspotter/TestDataset.csv)] file for details.
 
-```
-python hotspotter.py --csv_path TestDataset.csv
-```
+Run as
+
+    python hotspotter.py \
+    --csv_path TestDataset.csv \
+    --trained_model mlp-allfeatures.joblib
+
+---
+
+2. `mlp-allfeatures-alldata.joblib`: Similar to above but trained on the combined training + test dataset.
+
+Run as
+
+    python hotspotter.py \
+    --csv_path TestDataset.csv \
+    --trained_model mlp-allfeatures-alldata.joblib
+
+---
+
+3. `mlp-seqfeatures.joblib`: Similar to `mlp-allfeatures.joblib`, but only requires sequence features: "residue", "consurf", "secondary structure".
+
+Run as
+
+    python hotspotter.py \
+    --csv_path TestDataset.csv \
+    --trained_model mlp-seqfeatures.joblib \
+    --sequence_only true
+
+---
+
+4. `mlp-seqfeatures-alldata.joblib`: Similar to above but trained on the combined training + test dataset.
+
+Run as
+
+    python hotspotter.py \
+    --csv_path TestDataset.csv \
+    --trained_model mlp-seqfeatures-alldata.joblib \
+    --sequence_only true
+
+---
 
 (Note that `TestDataset.csv` is an example dataset we provide.)
 
@@ -80,7 +118,7 @@ python hotspotter.py --csv_path TestDataset.csv
 
 The results will be formatted as follows:
 
-```python hotspotter.py --csv_path TestDataset.csv 
+```
 ==========
 RESULTS
 ==========
@@ -134,5 +172,4 @@ Please install the pre-commits before making commits and submitting Pull Request
 conda install pre-commit --yes
 pre-commit install
 ```
-
 
