@@ -21,7 +21,7 @@ conda config --add channels conda-forge
 
 
 
-## Use the Hotspotter Script
+## Using the Hotspotter Script
 
 
 Install additional Python libraries via
@@ -162,7 +162,7 @@ We strongly recommend using the same protocols we described in the paper (see th
 
 
 
-## Use the Experiments Notebooks
+## Using the Experiments Notebooks
 
 In order to run the code in the experiment notebooks, install the following additional Python libraries:
 
