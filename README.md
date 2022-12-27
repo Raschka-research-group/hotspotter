@@ -66,11 +66,13 @@ optional arguments:
 <br>
 <br>
 
+You can run the hotspotter with 2 different classification models
 
-You can run the hotspotter with 4 different classification models
 
 
-1. `mlp-allfeatures.joblib`: the multilayer perceptron trained with the best hyperparameter settings on the training set and as evaluated in the research paper. This Model requires the feature columns  "avg bond number", "Hbond", "residue", "Hphob", "consurf", "B' side chain", "secondary structure",  "asa". See the   [[hotspotter/TestDataset.csv](hotspotter/TestDataset.csv)] file for details.
+### 1) Hotspotter trained on structural features
+
+`mlp-allfeatures.joblib`: the multilayer perceptron trained with the best hyperparameter settings on the training set and as evaluated in the research paper. This model requires the feature columns  "avg bond number", "Hbond", "residue", "Hphob", "consurf", "B' side chain", "secondary structure",  "asa". See the   [[hotspotter/TestDataset.csv](hotspotter/TestDataset.csv)] file for details.
 
 Run as
 
@@ -78,19 +80,17 @@ Run as
     --csv_path TestDataset.csv \
     --trained_model mlp-allfeatures.joblib
 
----
 
-2. `mlp-allfeatures-alldata.joblib`: Similar to above but trained on the combined training + test dataset.
 
-Run as
-
-    python hotspotter.py \
-    --csv_path TestDataset.csv \
-    --trained_model mlp-allfeatures-alldata.joblib
+### 2) Hotspotter trained on sequence features only
 
 ---
 
-3. `mlp-seqfeatures.joblib`: Similar to `mlp-allfeatures.joblib`, but only requires sequence features: "residue", "consurf", "secondary structure".
+`mlp-seqfeatures.joblib`: Similar to `mlp-allfeatures.joblib`, but only requires sequence features: "residue", "consurf", "secondary structure":
+
+<img src="images/sequence-only.png" alt="sequence-only" style="zoom:33%;" />
+
+
 
 Run as
 
@@ -99,16 +99,7 @@ Run as
     --trained_model mlp-seqfeatures.joblib \
     --sequence_only true
 
----
 
-4. `mlp-seqfeatures-alldata.joblib`: Similar to above but trained on the combined training + test dataset.
-
-Run as
-
-    python hotspotter.py \
-    --csv_path TestDataset.csv \
-    --trained_model mlp-seqfeatures-alldata.joblib \
-    --sequence_only true
 
 ---
 
@@ -136,6 +127,41 @@ Where each line corresponds to one row in the CSV file (1=hotspot, 0=not hotspot
 
 
 
+## Preparing Your Dataset
+
+We recommend using the [ [hotspotter/TestDataset.csv](hotspotter/TestDataset.csv) ] file as guidance when preparing your own dataset. 
+
+As mentioned in the previous section, the "Hotspotter trained on structural features" requires all columns of this dataset to be present. The "Hotspotter trained on sequence features only" only requires the following three columns: `residue`, `consurf`, `secondary structure`.
+
+We strongly recommend using the same protocols we described in the paper (see the excerpts below) for obtaining the required features.
+
+
+
+`avg bond number`, `Hbond`, `Hphob`, and `B' side chain`:
+
+>  We used ProFlex v. 5.1, software created by our lab [25, 26] and available at https://github.com/psa-lab/ProFlex, to calculate three bond and contact features for each residue: average bond number (the average number of covalent, hydrophobic, and hydrogen-bond contacts for atoms in the residue), the number of hydrogen bonds formed (considering the detailed geometry and length of bonds involving the donor, hydrogen and acceptor atoms), and the number of interatomic hydrophobic contacts, referred to as hydrophobic tethers in ProFlex. One ProFlex feature that was calculated, average bond weight, was not kept in our classifiers because it did not enhance the quality of prediction. To determine the energy level for use in ProFlex for calculating features, the Hether script distributed with ProFlex was used to identify the energy at which the number of rigid clusters of protein atoms changed most.
+>
+> [...] crystallographic temperature factor values, also known as B factors or B values, which experimentally quantify the mobility of each atom in the crystal structure, were extracted from the PDB file. The B values were used to calculate B’ for the side chain, in which the B values of the atoms in each side chain are averaged and divided by the average B value of all side chains in the protein, and then normalized by the average side-chain occupancy values for the same atoms. The occupancy data is also provided in PDB files [27]. This B’ normalization scales mobility values so they are on a consistent scale in different PDB entries [27, 28].
+
+
+
+`consurf`:
+
+> To measure residue conservation, we used the online ConSurf server (https://consurf.tau.ac.il; [30]) in default mode to generate a multiple sequence alignment of diverse homologs for each of the 97 PDB files in our dataset and assign a conservation value to each residue (from 1=most variable in amino acid type in the multiple sequence alignment to 9=most conserved).
+
+
+
+`asa` and `secondary structure`:
+
+> The final two residue features, accessible surface area (ASA) in the protein:protein complex and secondary structure type were calculated for the wild-type residue in each site with GROMACS version 2021.2. The four-state secondary structure type (T for turn, H for helix, S for strand, and – for other) was computed using the DSSP option in GROMACS [31–33], and the solvent accessible surface area was calculated using SASA in GROMACS [34]
+
+
+
+
+
+
+
+
 ## Use the Experiments Notebooks
 
 In order to run the code in the experiment notebooks, install the following additional Python libraries:
@@ -158,18 +184,5 @@ Next, start JupyterLab and use notebooks via the command
 
 ```
 jupyter lab
-```
-
-
-## Developers and Contributors
-
-
-
-Please install the pre-commits before making commits and submitting Pull Requests
-
-
-```
-conda install pre-commit --yes
-pre-commit install
 ```
 
