@@ -1,1 +1,1 @@
-Please see the [../README.md](../README.md) for details
+Please see the main [../README.md](../README.md) for details.
