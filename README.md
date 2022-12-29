@@ -1,5 +1,7 @@
 # Hotspotter
 
+"Hotspotter is software used to classify energetic hot spots of protein:protein interaction given a set of 8 structure-based (all features) or 3 sequence-based features pre-calculated by the user for residues in the protein of interest. See the [manuscript](paper/Preprint_hotspotter_methods_validation_results.pdf) for details.  The code and datasets used in the manuscript are also provided. The default for hotspotter scripts is training on the training data the user provides.  Alldata (not the same as all features) refers to training on both the user's training and test sets, which gives results biased by prior knowledge of the test set and is not recommended."
+
 
 
 ## Setting Up the Computing Environment
