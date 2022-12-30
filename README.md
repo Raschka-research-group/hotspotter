@@ -74,12 +74,12 @@ You can run the hotspotter with 2 different classification models
 
 ### 1) Hotspotter trained on structural features
 
-`mlp-allfeatures.joblib`: the multilayer perceptron trained with the best hyperparameter settings on the training set and as evaluated in the research paper. This model requires the feature columns  "avg bond number", "Hbond", "residue", "Hphob", "consurf", "B' side chain", "secondary structure",  "asa". See the   [[hotspotter/TestDataset.csv](hotspotter/TestDataset.csv)] file for details.
+`mlp-allfeatures.joblib`: the multilayer perceptron trained with the best hyperparameter settings on the training set and as evaluated in the research paper. This model requires the feature columns  "avg bond number", "Hbond", "residue", "Hphob", "consurf", "B' side chain", "secondary structure",  "asa". See the   [[hotspotter/UserData_input_for_hotspotter.csv](hotspotter/UserData_input_for_hotspotter.csv)] file for details.
 
 Run as
 
     python hotspotter.py \
-    --csv_path TestDataset.csv \
+    --csv_path UserData_input_for_hotspotter.csv \
     --trained_model mlp-allfeatures.joblib
 
 
@@ -97,7 +97,7 @@ Run as
 Run as
 
     python hotspotter.py \
-    --csv_path TestDataset.csv \
+    --csv_path UserData_input_for_hotspotter.csv \
     --trained_model mlp-seqfeatures.joblib \
     --sequence_only true
 
@@ -105,7 +105,7 @@ Run as
 
 ---
 
-(Note that `TestDataset.csv` is an example dataset we provide.)
+(Note that `UserData_input_for_hotspotter.csv` is an example dataset we provide.)
 
 
 
@@ -131,7 +131,7 @@ Where each line corresponds to one row in the CSV file (1=hotspot, 0=not hotspot
 
 ## Preparing Your Dataset
 
-We recommend using the [ [hotspotter/TestDataset.csv](hotspotter/TestDataset.csv) ] file as guidance when preparing your own dataset. 
+We recommend using the [ [hotspotter/UserData_input_for_hotspotter.csv](hotspotter/UserData_input_for_hotspotter.csv) ] file as guidance when preparing your own dataset. 
 
 As mentioned in the previous section, the "Hotspotter trained on structural features" requires all columns of this dataset to be present. The "Hotspotter trained on sequence features only" only requires the following three columns: `residue`, `consurf`, `secondary structure`.
 
